@@ -1,3 +1,6 @@
+export var base_url = "https://fa19server.appspot.com/api";
+
+
 export function createElementToParent(parent, child_type, inner_html) {
     var child = document.createElement(child_type);
     child.innerHTML = inner_html;

@@ -1,6 +1,4 @@
-import { sendRequest } from "./util.mjs";
-
-let base_url = "https://fa19server.appspot.com/api";
+import { sendRequest, base_url } from "./util.mjs";
 
 function isEmail(email) {
     var re = /\S+@\S+\.\S+/;
@@ -12,26 +10,30 @@ export function handleLoginClicked() {
     let secret = DOMPurify.sanitize(document.querySelector("#secret").value);
 
     let payload;
+    if(!user || !secret){
+        loginFailed();
+        return;
+    }
     if(isEmail(user)){
         payload = `email=${user}&password=${secret}`;
     }else{
         payload = `username=${user}&password=${secret}`;
     }
-
-
     sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
 }
 
 function responseToLoginRequest(xhr) {
     if (xhr.readyState == 4 && xhr.status == 200) {
         var resJson = JSON.parse(xhr.responseText);
-        var id = resJson.id;
-        var ttl = resJson.ttl;
-        var create = resJson.created;
-        var userId = resJson.userId;
-        alert(id + ttl + create + userId);
+        localStorage.setItem("XmasWishlist_access_key", resJson.id);
+        window.location.href = "XmasWishlist.html";
     }else if(xhr.readyState == 4 && xhr.status == 401) {
-        var resJson = JSON.parse(xhr.responseText);
-        alert(resJson[0]);
+        loginFailed();
     }
+}
+
+function loginFailed(){
+    document.querySelector("#error_box").innerHTML = "Login Failed! Double check your login credentials";
+    document.querySelector("#user").value = "";
+    document.querySelector("#secret").value = "";
 }
