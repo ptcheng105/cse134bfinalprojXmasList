@@ -1,8 +1,6 @@
 import { createElementToParent, isEmail } from "./util.mjs";
 
 export function handleSignupClicked() {
-    let user = DOMPurify.sanitize(document.querySelector("#user").value);
-    let secret = DOMPurify.sanitize(document.querySelector("#secret").value);
     let dialog = document.createElement("dialog");
     dialog.id = "signdialog";
     let username = createElementToParent(dialog, "p", '<label>Username:</label><input type="text" id="signuser">' );
@@ -22,7 +20,7 @@ export function handleSignupClicked() {
 function handleCancelButton(){
     let dialog = document.getElementById("signdialog");
     dialog.close();
-    dialog.parentNode.removeChild();
+    dialog.parentNode.removeChild(dialog);
 }
 
 export function handleSignUpButton() {
