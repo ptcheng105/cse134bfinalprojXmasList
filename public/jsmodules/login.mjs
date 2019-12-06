@@ -20,11 +20,9 @@ export function handleLoginClicked() {
 function responseToLoginRequest(xhr) {
     if (xhr.readyState == 4 && xhr.status == 200) {
         var resJson = JSON.parse(xhr.responseText);
-
         localStorage.setItem("XmasWishlist_user", DOMPurify.sanitize(document.querySelector("#user").value));
         localStorage.setItem("XmasWishlist_key", resJson.id);
         window.location.href = "XmasWishlist.html";
-
     }else if(xhr.readyState == 4 && xhr.status == 401) {
         loginFailed();
     }

@@ -8,14 +8,21 @@ export function handleSignupClicked() {
     let username = createElementToParent(dialog, "p", '<label>Username:</label><input type="text" id="signuser">' );
     let email = createElementToParent(dialog, "p", '<label>Email:</label><input type="text" id="signemail">')
     let password = createElementToParent(dialog, "p", '<label>Password:</label><input type="text" id="signpass">');
-    let button = createElementToParent(dialog, "button", "");
-    button.innerText = "Sign Up!";
-    button.addEventListener("click", handleSignUpButton);
+    let submitbutton = createElementToParent(dialog, "button", "Sign Up!");
+    submitbutton.addEventListener("click", handleSignUpButton);
+    let cancelbutton = createElementToParent(dialog, "button", "Cancel");
+    cancelbutton.addEventListener("click", handleCancelButton);
     let err = createElementToParent(dialog, "p", '');
     err.id = "errmsg";
     err.style = "color:red";
     document.body.appendChild(dialog);
     dialog.showModal();
+}
+
+function handleCancelButton(){
+    let dialog = document.getElementById("signdialog");
+    dialog.close();
+    dialog.parentNode.removeChild();
 }
 
 export function handleSignUpButton() {
@@ -35,7 +42,17 @@ export function handleSignUpButton() {
 }
 
 function responseToSignupRequest(xhr) {
-    let dialog = document.getElementById("signdialog");
-    dialog.close();
-    dialog.parentNode.removeChild()
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        let user = DOMPurify.sanitize(document.querySelector("#signuser").value);
+        let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
+        let payload = `email=${user}&password=${secret}`;
+        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
+        let dialog = document.getElementById("signdialog");
+        dialog.close();
+        dialog.parentNode.removeChild();
+    }else if(xhr.readyState == 4 && xhr.status == 422) {
+        // print msg from xhr
+        let err = document.getElementById("errmsg");
+        err.innerText = "Account Creation Failed";
+    }
 }
