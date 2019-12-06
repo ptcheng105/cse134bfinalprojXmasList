@@ -28,8 +28,14 @@
         }
 
         //start here
-        alert(localStorage.getItem("XmasWishlist_access_key"));
-
+        var user_name = localStorage.getItem("XmasWishlist_user");
+        var user_key = localStorage.getItem("XmasWishlist_key");
+        alert(user_name);
+        alert(user_key);
+        if(!user_name || !user_key){
+            alert("You have not logged in! redirecting to log in page.");
+            window.location.href = "login.html";
+        }
         var load_list_item_array = [new WishListItem("shit", 999, "poop", "", "yikessss")];
         var list_item_array = [];
         load_list_item_array.forEach(e => createListEntry("ul#wish_list", e.name, e.price, e.category, e.image, e.comment));
