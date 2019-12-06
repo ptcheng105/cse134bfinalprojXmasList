@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "cse134bfall19hw5",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

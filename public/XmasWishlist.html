@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Tim and Ben 's Christmas List</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.0.3/purify.js"></script>
+</head>
+
+<body>
+    <h1>Merry Christmas!</h1>
+    <button id="button_add">Add Item to Wish List</button>
+    <ul id="wish_list">
+    </ul>
+    <div id="dialog_div"></div>
+
+    <script type="module">
+        import { WishListItem, createListEntry, addNewListEntry } from "./jsmodules/wish_list_item.mjs";
+        import { createNewDialog, handleCloseDialog } from "./jsmodules/dialog.mjs";
+
+        function handleAddClicked() {
+            var dialog = createNewDialog();
+            dialog.querySelector("button#save").addEventListener("click", () => addNewListEntry(dialog));
+            dialog.querySelector("button#cancel").addEventListener("click", () => handleCloseDialog(dialog));
+            dialog.showModal();
+        }
+
+        var load_list_item_array = [new WishListItem("shit", 999, "poop", "", "yikessss")];
+        var list_item_array = [];
+        load_list_item_array.forEach(e => createListEntry("ul#wish_list", e.name, e.price, e.category, e.image, e.comment));
+
+        document.getElementById("button_add").addEventListener("click", handleAddClicked);
+        window.addEventListener("beforeunload", () => { alert("saving"); });
+    </script>
+</body>
+
+</html>
