@@ -9,6 +9,7 @@
 
 <body>
     <h1>Merry Christmas!</h1>
+    <button id="button_logout">LOGOUT</button>
     <button id="button_add">Add Item to Wish List</button>
     <ul id="wish_list">
     </ul>
@@ -17,6 +18,7 @@
     <script type="module">
         import { WishListItem, createListEntry, addNewListEntry } from "./jsmodules/wish_list_item.mjs";
         import { createNewDialog, handleCloseDialog } from "./jsmodules/dialog.mjs";
+        import { handleLogout } from "./jsmodules/logout.mjs";
 
         function handleAddClicked() {
             var dialog = createNewDialog();
@@ -25,11 +27,15 @@
             dialog.showModal();
         }
 
+        //start here
+        alert(localStorage.getItem("XmasWishlist_access_key"));
+
         var load_list_item_array = [new WishListItem("shit", 999, "poop", "", "yikessss")];
         var list_item_array = [];
         load_list_item_array.forEach(e => createListEntry("ul#wish_list", e.name, e.price, e.category, e.image, e.comment));
 
         document.getElementById("button_add").addEventListener("click", handleAddClicked);
+        document.getElementById("button_logout").addEventListener("click", handleLogout);
         window.addEventListener("beforeunload", () => { alert("saving"); });
     </script>
 </body>
