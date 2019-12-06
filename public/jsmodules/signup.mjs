@@ -10,10 +10,12 @@ export function handleSignupClicked() {
     let password = createElementToParent(dialog, "p", '<label>Password:</label><input type="text" id="signpass">');
     let button = createElementToParent(dialog, "button", "");
     button.innerText = "Sign Up!";
-    let err = createElementToParent(dialog, "p", "");
+    button.addEventListener("click", handleSignUpButton);
+    let err = createElementToParent(dialog, "p", '');
     err.id = "errmsg";
+    err.style = "color:red";
     document.body.appendChild(dialog);
-    dialog.show();
+    dialog.showModal();
 }
 
 export function handleSignUpButton() {
