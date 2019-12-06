@@ -15,18 +15,13 @@ export function createXHR() {
     return null;
 }
 
-export function sendRequest(method, url, readyState, status, reactionFunction, payload) {
+export function sendRequest(method, url, responseFunction, payload) {
     var xhr = createXHR();
 
     if (xhr) {
         xhr.open(method, url, true);
-        xhr.onreadystatechange = function () { handleResponse(xhr, readyState, status, reactionFunction); };
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () { responseFunction(xhr); };
         xhr.send(payload);
-    }
-}
-
-function handleResponse(xhr, readyState, status, reactionFunction) {
-    if (xhr.readyState == readyState && xhr.status == status) {
-        reactionFunction(xhr);
     }
 }
