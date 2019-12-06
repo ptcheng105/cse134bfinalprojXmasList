@@ -28,3 +28,8 @@ export function sendRequest(method, url, responseFunction, payload) {
         xhr.send(payload);
     }
 }
+
+function isEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}

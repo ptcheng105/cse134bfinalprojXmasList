@@ -1,9 +1,4 @@
-import { sendRequest, base_url } from "./util.mjs";
-
-function isEmail(email) {
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
-}
+import { sendRequest, base_url, isEmail } from "./util.mjs";
 
 export function handleLoginClicked() {
     let user = DOMPurify.sanitize(document.querySelector("#user").value);
