@@ -15,20 +15,18 @@ export function createXHR() {
     return null;
 }
 
-export function sendRequest(method, url, readyState, status, reactionFunction, payload)
-{
+export function sendRequest(method, url, readyState, status, reactionFunction, payload) {
     var xhr = createXHR();
- 
-    if (xhr)
-     {
-       xhr.open(method,url,true);
-      xhr.onreadystatechange = function(){handleResponse(xhr, readyState, status, reactionFunction);};
-      xhr.send(payload);
-     }
+
+    if (xhr) {
+        xhr.open(method, url, true);
+        xhr.onreadystatechange = function () { handleResponse(xhr, readyState, status, reactionFunction); };
+        xhr.send(payload);
+    }
 }
 
-function handleResponse(xhr, readyState, status, reactionFunction){
-    if ( xhr.readyState == readyState && xhr.status == status){
+function handleResponse(xhr, readyState, status, reactionFunction) {
+    if (xhr.readyState == readyState && xhr.status == status) {
         reactionFunction();
     }
 }
