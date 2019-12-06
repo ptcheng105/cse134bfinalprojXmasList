@@ -15,7 +15,7 @@ export function createXHR() {
     return null;
 }
 
-export function sendRequest(method, url, readyState, status, reactionFunction)
+export function sendRequest(method, url, readyState, status, reactionFunction, payload)
 {
     var xhr = createXHR();
  
@@ -23,7 +23,7 @@ export function sendRequest(method, url, readyState, status, reactionFunction)
      {
        xhr.open(method,url,true);
       xhr.onreadystatechange = function(){handleResponse(xhr, readyState, status, reactionFunction);};
-      xhr.send(null);
+      xhr.send(payload);
      }
 }
 
