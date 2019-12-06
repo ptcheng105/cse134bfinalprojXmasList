@@ -16,8 +16,9 @@
     <p><button id="signup">Sign Up</button></p>
 
     <script type="module">
-            import { isEmail, handleLoginClicked } from "./jsmodules/login.mjs";
+            import { handleLoginClicked } from "./jsmodules/login.mjs";
             import { handleSignupClicked } from "./jsmodules/signup.mjs";
+            import { isEmail } from "./jsmodules/signup.mjs";
             document.querySelector("button#login").addEventListener("click", handleLoginClicked);
             document.querySelector("button#signup").addEventListener("click", handleSignupClicked);        </script>
 </body>
