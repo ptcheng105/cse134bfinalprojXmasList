@@ -1,4 +1,4 @@
-import { createElementToParent } from "./util.mjs";
+import { createElementToParent, isEmail } from "./util.mjs";
 
 export function handleSignupClicked() {
     let user = DOMPurify.sanitize(document.querySelector("#user").value);
@@ -24,7 +24,7 @@ export function handleSignUpButton() {
     let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
     let payload;
     if(isEmail(email) && user && secret) {
-        payload = `email=${user}&password=${secret}`;
+        payload = `username=${email}&email=${user}&password=${secret}`;
         sendRequest("POST", base_url + "/Users", responseToSignupRequest, payload );
     }else{
         let err = document.body.querySelector("#errmsg");
@@ -35,7 +35,6 @@ export function handleSignUpButton() {
 }
 
 function responseToSignupRequest(xhr) {
-
     let dialog = document.getElementById("signdialog");
     dialog.close();
     dialog.parentNode.removeChild()

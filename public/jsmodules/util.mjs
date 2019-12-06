@@ -29,7 +29,7 @@ export function sendRequest(method, url, responseFunction, payload) {
     }
 }
 
-function isEmail(email) {
+export function isEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
