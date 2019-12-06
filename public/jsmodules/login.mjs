@@ -1,6 +1,5 @@
 import { sendRequest, base_url, isEmail } from "./util.mjs";
 
-
 export function handleLoginClicked() {
     let user = DOMPurify.sanitize(document.querySelector("#user").value);
     let secret = DOMPurify.sanitize(document.querySelector("#secret").value);
