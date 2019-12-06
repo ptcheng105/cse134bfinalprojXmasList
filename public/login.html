@@ -12,11 +12,13 @@
     <p><label>Username or Email:</label><input type="text" id="user"></p>
     <p><label>password:</label><input type="password" id="secret"></p>
     <p><button id="login">Login</button></p>
-    <p>Newcomer? welcome! sign up <a href="signup.html">here</a>!</p>
+    <p><button id="signup">Sign Up</button></p>
+
     <script type="module">
-            import { handleLoginClicked } from "./jsmodules/login.mjs";
+            import { isEmail, handleLoginClicked } from "./jsmodules/login.mjs";
+            import { handleSignupClicked } from "./jsmodules/signup.mjs";
             document.querySelector("button#login").addEventListener("click", handleLoginClicked);
-        </script>
+            document.querySelector("button#signup").addEventListener("click", handleSignupClicked)        </script>
 </body>
 
 </html>

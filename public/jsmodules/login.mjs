@@ -2,7 +2,7 @@ import { sendRequest } from "./util.mjs";
 
 let base_url = "https://fa19server.appspot.com/api";
 
-function isEmail(email) {
+export function isEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
