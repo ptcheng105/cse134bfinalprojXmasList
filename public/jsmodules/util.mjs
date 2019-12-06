@@ -27,6 +27,6 @@ export function sendRequest(method, url, readyState, status, reactionFunction, p
 
 function handleResponse(xhr, readyState, status, reactionFunction) {
     if (xhr.readyState == readyState && xhr.status == status) {
-        reactionFunction();
+        reactionFunction(xhr);
     }
 }
