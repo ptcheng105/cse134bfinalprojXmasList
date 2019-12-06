@@ -24,6 +24,14 @@ export function handleLoginClicked() {
 
 function responseToLoginRequest(xhr) {
     if (xhr.readyState == 4 && xhr.status == 200) {
-        alert(xhr.responseText);
+        var resJson = JSON.parse(xhr.responseText);
+        var id = resJson.id;
+        var ttl = resJson.ttl;
+        var create = resJson.created;
+        var userId = resJson.userId;
+        alert(id + ttl + create + userId);
+    }else if(xhr.readyState == 4 && xhr.status == 401) {
+        var resJson = JSON.parse(xhr.responseText);
+        alert(resJson[0]);
     }
 }
