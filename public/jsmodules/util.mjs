@@ -25,7 +25,7 @@ export function sendRequest(method, url, responseFunction, timeoutFunction, payl
         xhr.open(method, url, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () { responseFunction(xhr); };
-        xhr.timeout = 3000;
+        xhr.timeout = 5000;
         xhr.ontimeout = function() {timeoutFunction();};
         xhr.send(payload);
     }

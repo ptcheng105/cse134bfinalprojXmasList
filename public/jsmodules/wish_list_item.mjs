@@ -194,6 +194,7 @@ function deleteEntry(dialog, li) {
 
     let url = base_url + `/wishlists/${item_id}?access_token=` + localStorage.getItem("XmasWishlist_key");
     //send request
+    dialog.querySelector("#msg_box").innerText = "Waiting for server reply...please wait";
     sendRequest("DELETE", url, (xhr) => { respDeleteEntry(xhr, li); }, () => { alert("delete entry timed out!"); }, null);
 
 }
