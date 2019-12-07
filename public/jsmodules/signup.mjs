@@ -30,7 +30,7 @@ export function handleSignUpButton() {
     let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
     let payload;
     if(isEmail(email) && user && secret) {
-        payload = `username=${email}&email=${user}&password=${secret}`;
+        payload = `username=${user}&email=${email}&password=${secret}`;
         sendRequest("POST", base_url + "/Users", responseToSignupRequest, payload );
     }else{
         let err = document.body.querySelector("#errmsg");
@@ -44,11 +44,11 @@ function responseToSignupRequest(xhr) {
     if (xhr.readyState == 4 && xhr.status == 200) {
         let user = DOMPurify.sanitize(document.querySelector("#signuser").value);
         let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
-        let payload = `email=${user}&password=${secret}`;
-        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
+        let payload = `username=${user}&password=${secret}`;
+        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, () => (alert("Sign Up Timed Out")), payload );
         let dialog = document.getElementById("signdialog");
         dialog.close();
-        dialog.parentNode.removeChild();
+        dialog.parentNode.removeChild(dialog);
     }else if(xhr.readyState == 4 && xhr.status == 422) {
         // print msg from xhr
         let err = document.getElementById("errmsg");
