@@ -92,7 +92,7 @@ export function createListEntry(list_selector, item_id, item_name, item_price, i
 
     //create three div for different stuff in the entry
     //img div
-    var div_image = createElementToParent(li, "div", `<img src="${item_image}" alt="item image broken">`);
+    li.innerHTML = `<img src="${item_image}" alt="item image broken">`;
 
     //info div
     var div_info = createElementToParent(li, "div", "");
@@ -103,10 +103,11 @@ export function createListEntry(list_selector, item_id, item_name, item_price, i
     var p_comment = createElementToParent(div_info, "p", `Comment: <span id="item_comment">${item_comment}</span>`);
 
     //action div( for buttons)
-    var div_action = createElementToParent(li, "div", '<div id="edit"><img src="/media/edit.png"></div><div id="delete"><img src="/media/delete.png"></div>');
+    var div_edit = createElementToParent(li, "div", '<img src="/media/file.png" style="height:30px; width:30px;">');
+    var div_delete = createElementToParent(li, "div", '<img src="/media/delete2.png" style="height:30px; width:30px;">');
 
-    div_action.querySelector("#edit").addEventListener("click", () => handleEdit(li));
-    div_action.querySelector("#delete").addEventListener("click", () => handleDelete(li));
+    div_edit.addEventListener("click", () => handleEdit(li));
+    div_delete.addEventListener("click", () => handleDelete(li));
 
     //append this li
     list.appendChild(li);
@@ -179,7 +180,7 @@ function respEditEntry(xhr) {
 function handleDelete(li) {
     var dialog_div = document.getElementById("dialog_div");
     var dialog = document.createElement("dialog");
-    dialog.innerHTML = '<p>Delete This Item?</p><p><button id="no">No</button><button id="yes">Yes</button></p><div id="msg_box"></div>';
+    dialog.innerHTML = '<p>Delete This Item?</p><p><button id="yes">Yes</button><button id="no">No</button></p><div id="msg_box"></div>';
     dialog_div.appendChild(dialog);
     dialog.querySelector("#no").addEventListener("click", () => handleCloseDialog(dialog));
     dialog.querySelector("#yes").addEventListener("click", () => deleteEntry(dialog, li));
