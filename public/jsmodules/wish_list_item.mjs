@@ -63,7 +63,7 @@ export function addNewListEntry(dialog, imgurl) {
     let url = base_url + "/wishlists?access_token=" + localStorage.getItem("XmasWishlist_key");
     console.log(imgurl);
     let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${imgurl}&comment=${item_comment}`;
-
+    dialog.querySelector("#msg_box").innerText = "Waiting for server reply...please wait";
     //send request
     sendRequest("POST", url, respAddListEntry, () => { alert("add entry timed out!"); }, payload);
     //createListEntry("ul#wish_list", item_name, item_price, item_category, item_image, item_comment);
@@ -92,7 +92,7 @@ export function createListEntry(list_selector, item_id, item_name, item_price, i
 
     //create three div for different stuff in the entry
     //img div
-    li.innerHTML = `<img src="${item_image}" alt="item image broken">`;
+    li.innerHTML = `<img src="${item_image}" alt="No Image">`;
 
     //info div
     var div_info = createElementToParent(li, "div", "");
@@ -149,7 +149,9 @@ function editExistingEntry(dialog,imgurl) {
     let item_id = dialog.getAttribute("data-item-id");
     let url = base_url + `/wishlists/${item_id}/replace?access_token=` + localStorage.getItem("XmasWishlist_key");
     let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${imgurl}&comment=${item_comment}`;
+    
     //send request
+    dialog.querySelector("#msg_box").innerText = "Waiting for server reply...please wait";
     sendRequest("POST", url, respEditEntry, () => { alert("edit entry timed out!"); }, payload);
 }
 
@@ -180,7 +182,7 @@ function respEditEntry(xhr) {
 function handleDelete(li) {
     var dialog_div = document.getElementById("dialog_div");
     var dialog = document.createElement("dialog");
-    dialog.innerHTML = '<p>Delete This Item?</p><p><button id="yes">Yes</button><button id="no">No</button></p><div id="msg_box"></div>';
+    dialog.innerHTML = 'Delete This Item?<button id="yes">Yes</button><button id="no">No</button><br><div id="msg_box"></div>';
     dialog_div.appendChild(dialog);
     dialog.querySelector("#no").addEventListener("click", () => handleCloseDialog(dialog));
     dialog.querySelector("#yes").addEventListener("click", () => deleteEntry(dialog, li));

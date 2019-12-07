@@ -7,10 +7,14 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.0.3/purify.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/list_item.css">
+    <link rel="stylesheet" type="text/css" href="css/dialog.css">
+    <script type="module">
+        import '@polymer/paper-button/paper-button.js';
+    </script>
 </head>
 
 <body>
-    <h1>Merry Christmas!</h1>
+    <h1 id="welcome_text"></h1>
     <button id="button_logout">LOGOUT</button>
     <button id="button_add">Add Item to Wish List</button>
     <ul id="wish_list">
@@ -31,6 +35,7 @@
 
         //start here
         var user_name = localStorage.getItem("XmasWishlist_user");
+        document.getElementById("welcome_text").innerText = `Hi ${user_name}! Welcome to Your Xmas Wish List!`;
         var user_key = localStorage.getItem("XmasWishlist_key");
         if (!user_name || !user_key) {
             alert("You have not logged in! redirecting to log in page.");
