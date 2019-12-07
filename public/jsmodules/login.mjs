@@ -17,7 +17,7 @@ export function handleLoginClicked() {
     sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
 }
 
-function responseToLoginRequest(xhr) {
+export function responseToLoginRequest(xhr) {
     if (xhr.readyState == 4 && xhr.status == 200) {
         var resJson = JSON.parse(xhr.responseText);
         localStorage.setItem("XmasWishlist_user", DOMPurify.sanitize(document.querySelector("#user").value));

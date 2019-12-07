@@ -1,4 +1,5 @@
-import { createElementToParent, isEmail, sendRequest, responseToLoginRequest } from "./util.mjs";
+import { createElementToParent, isEmail, sendRequest, base_url } from "./util.mjs";
+import { responseToLoginRequest } from "./login.mjs"
 
 export function handleSignupClicked() {
     let dialog = document.createElement("dialog");
