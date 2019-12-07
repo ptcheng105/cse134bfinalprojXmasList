@@ -12,13 +12,40 @@ export class WishListItem {
     }
 }
 
+function upload(item_image){
+    var url = `https://api.cloudinary.com/v1_1/b1ayala/upload`;
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    fd.append('upload_preset', 'default');
+    fd.append('file', item_image);
+    var imgurl;
+    xhr.onreadystatechange = function(imgurl) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // File uploaded successfully
+          var response = JSON.parse(xhr.responseText);
+          // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+           imgurl = response.secure_url;
+
+        }
+    }
+    xhr.send(fd);
+    return imgurl
+}
+
 //Adding a new list entry
 export function addNewListEntry(dialog) {
     var item_name = DOMPurify.sanitize(dialog.querySelector("p:nth-child(1) input").value);
     var item_price = dialog.querySelector("p:nth-child(2) input").value;
     var item_category = dialog.querySelector("p:nth-child(3) select").value;
-    var item_image = dialog.querySelector("p:nth-child(4) input").value;
+    var item_image = dialog.querySelector("p:nth-child(4) input");
     var item_comment = DOMPurify.sanitize(dialog.querySelector("p:nth-child(5) textarea").value);
+    
+    let img = item_image.files[0];
+    let imgurl = upload(img);
+    console.log("Cloudinary saved the img at " + imgurl);
+    
 
     //clear error msg if exist
     var msg = document.querySelector("body ul p#error_msg");
@@ -27,7 +54,7 @@ export function addNewListEntry(dialog) {
     }
 
     let url = base_url + "/wishlists?access_token=" + localStorage.getItem("XmasWishlist_key");
-    payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${item_image}&comment=${item_comment}`;
+    payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${imgurl}&comment=${item_comment}`;
     //send request
     sendRequest("POST", url, respAddListEntry, () => {alert("add entry timed out!");}, payload);
     //createListEntry("ul#wish_list", item_name, item_price, item_category, item_image, item_comment);

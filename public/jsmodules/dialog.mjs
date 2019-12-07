@@ -13,8 +13,8 @@ export function createNewDialog() {
     var category_list_html = generateSelectHtml(Category_list);
     console.log(category_list_html);
     var line3 = createElementToParent(dialog, "p", category_list_html);
-    //var line4 = createElementToParent(dialog, "p", '<label>Add Image? </label><input type="file" name="item_image" accept="image/jpg">');
-    var line4 = createElementToParent(dialog, "p", '<label>Add Image? </label><input type="text" name="item_image">');
+    var line4 = createElementToParent(dialog, "p", '<label>Add Image? </label><input type="file" name="item_image" accept="image/jpg">');
+    //var line4 = createElementToParent(dialog, "p", '<label>Add Image? </label><input type="text" name="item_image">');
     var line5 = createElementToParent(dialog, "p", "<label>Add Comment? </label><br><textarea name='item_comment' rows='10' cols='30' spellcheck='true'>");
     var line6 = createElementToParent(dialog, "div", "<button id='save'>SAVE</button><button id='cancel'>CANCEL</button>");
     var line7 = createElementToParent(dialog, "div", "<p id='msg_box'></p>");
