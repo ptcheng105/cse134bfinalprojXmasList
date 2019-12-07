@@ -16,13 +16,13 @@
     <div id="dialog_div"></div>
 
     <script type="module">
-        import { WishListItem, createListEntry, addNewListEntry } from "./jsmodules/wish_list_item.mjs";
+        import { getAllListedItem, addNewListEntry, createListEntry, uploadImage } from "./jsmodules/wish_list_item.mjs";
         import { createNewDialog, handleCloseDialog } from "./jsmodules/dialog.mjs";
         import { handleLogout } from "./jsmodules/logout.mjs";
 
         function handleAddClicked() {
             var dialog = createNewDialog();
-            dialog.querySelector("button#confirm").addEventListener("click", () => addNewListEntry(dialog));
+            dialog.querySelector("button#confirm").addEventListener("click", () => uploadImage(dialog, addNewListEntry));
             dialog.querySelector("button#cancel").addEventListener("click", () => handleCloseDialog(dialog));
             dialog.showModal();
         }
@@ -34,10 +34,9 @@
             alert("You have not logged in! redirecting to log in page.");
             window.location.href = "login.html";
         } else {
-            var load_list_item_array = [new WishListItem("shitid", "shit", 999, "poop", "", "yikessss")];
-            var list_item_array = [];
-            load_list_item_array.forEach(e => createListEntry("ul#wish_list", e.id, e.name, e.price, e.category, e.image, e.comment));
-
+            //load item list
+            getAllListedItem(user_key);
+            
             document.getElementById("button_add").addEventListener("click", handleAddClicked);
             document.getElementById("button_logout").addEventListener("click", handleLogout);
             window.addEventListener("beforeunload", () => { alert("saving"); });

@@ -2,26 +2,57 @@ import { createElementToParent, forceLogout } from "./util.mjs";
 import { handleCloseDialog, createNewDialog } from './dialog.mjs';
 import { sendRequest, base_url } from "./util.mjs";
 
-export class WishListItem {
-    constructor(id, name, price, category, image, comment) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        this.image = image;
-        this.comment = comment;
+export function uploadImage(dialog, afterImageUploadedFunction) {
+    var item_image = dialog.querySelector("p:nth-child(4) input");
+    let img = item_image.files[0];
+
+    var url = `https://api.cloudinary.com/v1_1/b1ayala/upload`;
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    fd.append('upload_preset', 'default');
+    fd.append('file', img);
+    var imgurl;
+    xhr.onreadystatechange = function (imgurl) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // File uploaded successfully
+            var response = JSON.parse(xhr.responseText);
+            imgurl = response.secure_url;
+            // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+            console.log(imgurl);
+            afterImageUploadedFunction(dialog, imgurl);
+        }else if (xhr.readyState == 4 && xhr.status == 400){
+            afterImageUploadedFunction(dialog, "");
+        }
+    }
+    xhr.send(fd);
+}
+//get all list item
+export function getAllListedItem(access_key){
+    let url = base_url + "/wishlists/myWishlist?access_token=" + access_key;
+    sendRequest("GET", url, respGetAllEntry, () => {document.querySelector("#dialog_div").innerHTML = ""; alert("Server Timed out! couldn't get saved list item")}, null)
+}
+
+function respGetAllEntry(xhr){
+    var dialog = document.querySelector("#dialog_div dialog");
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        var item_list = JSON.parse(xhr.responseText).wishItems;
+        //var load_list_item_array = [new WishListItem("shitid", "shit", 999, "poop", "", "yikessss")];
+        item_list.forEach(e => createListEntry("ul#wish_list", e.id, e.item, e.price, e.category, e.image, e.comment));
+    } else if (xhr.readyState == 4 && xhr.status == 401) {
+        alert("your access is outdated, please log in again!");
+        forceLogout();
     }
 }
 
+
 //Adding a new list entry
-export function addNewListEntry(dialog) {
+export function addNewListEntry(dialog, imgurl) {
     var item_name = DOMPurify.sanitize(dialog.querySelector("p:nth-child(1) input").value);
     var item_price = dialog.querySelector("p:nth-child(2) input").value;
     var item_category = dialog.querySelector("p:nth-child(3) select").value;
-    var item_image = dialog.querySelector("p:nth-child(4) input").value;
     var item_comment = DOMPurify.sanitize(dialog.querySelector("p:nth-child(5) textarea").value);
-
-    console.log(item_price);
 
     //clear error msg if exist
     var msg = document.querySelector("body ul p#error_msg");
@@ -30,7 +61,9 @@ export function addNewListEntry(dialog) {
     }
 
     let url = base_url + "/wishlists?access_token=" + localStorage.getItem("XmasWishlist_key");
-    let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${item_image}&comment=${item_comment}`;
+    console.log(imgurl);
+    let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${imgurl}&comment=${item_comment}`;
+
     //send request
     sendRequest("POST", url, respAddListEntry, () => { alert("add entry timed out!"); }, payload);
     //createListEntry("ul#wish_list", item_name, item_price, item_category, item_image, item_comment);
@@ -85,7 +118,8 @@ export function createListEntry(list_selector, item_id, item_name, item_price, i
 // Editing items
 function handleEdit(li) {
     var dialog = createNewDialog();
-
+    let item_id = li.getAttribute("data-item-id");
+    dialog.setAttribute("data-item-id", `${item_id}`)
     //TODO deal with img
 
     var item_name = li.querySelector("#item_name").innerHTML;
@@ -93,7 +127,6 @@ function handleEdit(li) {
     var item_category = li.querySelector("#item_category").innerText;
     //var item_image = li.querySelector("img").innerHTML;
     var item_comment = li.querySelector("#item_comment").innerHTML;
-    var item_id = li.dataset.itemId;
 
     dialog.querySelector("p:nth-child(1) input").value = item_name;
     dialog.querySelector("p:nth-child(2) input").value = parseInt(item_price, 10);
@@ -101,20 +134,20 @@ function handleEdit(li) {
     //dialog.querySelector("p:nth-child(4) input").value = item_image;
     dialog.querySelector("p:nth-child(5) textarea").value = item_comment;
 
-    dialog.querySelector("button#confirm").addEventListener("click", () => editExistingEntry(dialog, item_id));
+    dialog.querySelector("button#confirm").addEventListener("click", () => uploadImage(dialog, editExistingEntry));
     dialog.querySelector("button#cancel").addEventListener("click", () => handleCloseDialog(dialog));
     dialog.showModal();
 }
 
-function editExistingEntry(dialog, item_id) {
+function editExistingEntry(dialog,imgurl) {
     var item_name = DOMPurify.sanitize(dialog.querySelector("p:nth-child(1) input").value);
     var item_price = dialog.querySelector("p:nth-child(2) input").value;
     var item_category = dialog.querySelector("p:nth-child(3) select").value;
-    var item_image = dialog.querySelector("p:nth-child(4) input").value;
     var item_comment = dialog.querySelector("p:nth-child(5) textarea").value;
-
+    console.log(imgurl);
+    let item_id = dialog.getAttribute("data-item-id");
     let url = base_url + `/wishlists/${item_id}/replace?access_token=` + localStorage.getItem("XmasWishlist_key");
-    let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${item_image}&comment=${item_comment}`;
+    let payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${imgurl}&comment=${item_comment}`;
     //send request
     sendRequest("POST", url, respEditEntry, () => { alert("edit entry timed out!"); }, payload);
 }
@@ -128,7 +161,8 @@ function respEditEntry(xhr) {
         li.querySelector("#item_name").innerHTML = resJson.item;
         li.querySelector("#item_price").innerHTML = resJson.price;
         li.querySelector("#item_category").innerHTML = resJson.category;
-        //li.querySelector("img").innerHTML;
+        console.log("Update:" + resJson.image);
+        li.querySelector("img").src = resJson.image;
         li.querySelector("#item_comment").innerHTML = resJson.comment;
 
         handleCloseDialog(dialog);
