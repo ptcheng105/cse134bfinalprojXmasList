@@ -1,5 +1,6 @@
 import {createElementToParent} from "./util.mjs";
 import {handleCloseDialog, createNewDialog} from './dialog.mjs';
+import { sendRequest, base_url } from "./util.mjs";
 
 export class WishListItem {
     constructor(name, price, category, image, comment) {
@@ -11,25 +12,43 @@ export class WishListItem {
     }
 }
 
+//Adding a new list entry
 export function addNewListEntry(dialog) {
     var item_name = DOMPurify.sanitize(dialog.querySelector("p:nth-child(1) input").value);
     var item_price = dialog.querySelector("p:nth-child(2) input").value;
     var item_category = dialog.querySelector("p:nth-child(3) select").value;
     var item_image = dialog.querySelector("p:nth-child(4) input").value;
-    var item_comment = dialog.querySelector("p:nth-child(5) textarea").value;
+    var item_comment = DOMPurify.sanitize(dialog.querySelector("p:nth-child(5) textarea").value);
 
     //clear error msg if exist
     var msg = document.querySelector("body ul p#error_msg");
     if(msg){
         msg.parentNode.removeChild(msg);
     }
-    createListEntry("ul#wish_list", item_name, item_price, item_category, item_image, item_comment);
-    handleCloseDialog(dialog);
+
+    let url = base_url + "/wishlists?access_token=" + localStorage.getItem("XmasWishlist_key");
+    payload = `item=${item_name}&price=${item_price}&category=${item_category}&image=${item_image}&comment=${item_comment}`;
+    //send request
+    sendRequest("POST", url, respAddListEntry, () => {alert("add entry timed out!");}, payload);
+    //createListEntry("ul#wish_list", item_name, item_price, item_category, item_image, item_comment);
+    //handleCloseDialog(dialog);
 }
 
-export function createListEntry(list_selector, item_name, item_price, item_category, item_image, item_comment) {
+function respAddListEntry(xhr){
+    var dialog = document.querySelector("#dialog_div dialog");
+    var resJson = JSON.parse(xhr.responseText);
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        createListEntry("ul#wish_list", resJson.id, resJson.item, resJson.price, resJson.category, resJson.image, resJson.comment);
+        handleCloseDialog(dialog);
+    }else if(xhr.readyState == 4 && xhr.status >= 400) {
+        dialog.querySelector("#msg_box").innerText = "Failed to add! Error:" + resJson.error.message;
+    }
+}
+
+export function createListEntry(list_selector, item_id, item_name, item_price, item_category, item_image, item_comment) {
     var list = document.querySelector(list_selector);
     var li = document.createElement("li");
+    li.setAttribute("data-itemID", item_id);
 
     //create three div for different stuff in the entry
     //img div

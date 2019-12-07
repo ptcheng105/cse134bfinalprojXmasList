@@ -18,13 +18,14 @@ export function createXHR() {
     return null;
 }
 
-export function sendRequest(method, url, responseFunction, payload) {
+export function sendRequest(method, url, responseFunction, timeoutFunction, payload) {
     var xhr = createXHR();
 
     if (xhr) {
         xhr.open(method, url, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () { responseFunction(xhr); };
+        xhr.ontimeout = function() {timeoutFunction();};
         xhr.send(payload);
     }
 }

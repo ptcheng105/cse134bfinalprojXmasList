@@ -14,7 +14,7 @@ export function handleLoginClicked() {
     }else{
         payload = `username=${user}&password=${secret}`;
     }
-    sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
+    sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, handleLoginTimeout, payload);
 }
 
 export function responseToLoginRequest(xhr) {
@@ -30,6 +30,12 @@ export function responseToLoginRequest(xhr) {
 
 function loginFailed(){
     document.querySelector("#error_box").innerHTML = "Login Failed! Double check your login credentials";
+    document.querySelector("#user").value = "";
+    document.querySelector("#secret").value = "";
+}
+
+function handleLoginTimeout(){
+    document.querySelector("#error_box").innerHTML = "Login Failed! Connecting to Server is Timed out, check your network";
     document.querySelector("#user").value = "";
     document.querySelector("#secret").value = "";
 }

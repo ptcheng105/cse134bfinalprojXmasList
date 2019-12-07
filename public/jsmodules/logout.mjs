@@ -2,7 +2,7 @@ import { sendRequest, base_url } from "./util.mjs";
 
 export function handleLogout(){
     var key = localStorage.getItem("XmasWishlist_key");
-    sendRequest("POST", base_url + "/Users/logout" + "?access_token=" + key, resLogout, null);
+    sendRequest("POST", base_url + "/Users/logout" + "?access_token=" + key, resLogout, logoutTimedOut, null);
 }
 
 function resLogout(xhr){
@@ -14,4 +14,9 @@ function resLogout(xhr){
     localStorage.removeItem("XmasWishlist_user");
     localStorage.removeItem("XmasWishlist_key");
     window.location.href = "login.html";
+}
+
+function logoutTimedOut(){
+    alert("Logout Failed! Timed Out, Check network connection!");
+
 }
