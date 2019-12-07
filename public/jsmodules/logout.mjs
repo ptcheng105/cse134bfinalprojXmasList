@@ -1,4 +1,4 @@
-import { sendRequest, base_url } from "./util.mjs";
+import { sendRequest, base_url , forceLogout } from "./util.mjs";
 
 export function handleLogout(){
     var key = localStorage.getItem("XmasWishlist_key");
@@ -11,9 +11,7 @@ function resLogout(xhr){
     }else if(xhr.readyState == 4 && xhr.status == 401) {
         alert("Logout failed, you should have been logged out or access key timed out");
     }
-    localStorage.removeItem("XmasWishlist_user");
-    localStorage.removeItem("XmasWishlist_key");
-    window.location.href = "login.html";
+    forceLogout();
 }
 
 function logoutTimedOut(){

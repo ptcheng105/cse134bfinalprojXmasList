@@ -25,6 +25,7 @@ export function sendRequest(method, url, responseFunction, timeoutFunction, payl
         xhr.open(method, url, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () { responseFunction(xhr); };
+        xhr.timeout = 3000;
         xhr.ontimeout = function() {timeoutFunction();};
         xhr.send(payload);
     }
@@ -33,4 +34,10 @@ export function sendRequest(method, url, responseFunction, timeoutFunction, payl
 export function isEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
+}
+
+export function forceLogout(){
+    localStorage.removeItem("XmasWishlist_user");
+    localStorage.removeItem("XmasWishlist_key");
+    window.location.href = "login.html";
 }
