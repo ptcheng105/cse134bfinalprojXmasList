@@ -103,7 +103,7 @@ export function createListEntry(list_selector, item_id, item_name, item_price, i
     var p_comment = createElementToParent(div_info, "p", `Comment: <span id="item_comment">${item_comment}</span>`);
 
     //action div( for buttons)
-    var div_action = createElementToParent(li, "div", '<button id="edit">EDIT</button><button id="delete">DELETE</button>');
+    var div_action = createElementToParent(li, "div", '<div id="edit"><img src="/media/edit.png"></div><div id="delete"><img src="/media/delete.png"></div>');
 
     div_action.querySelector("#edit").addEventListener("click", () => handleEdit(li));
     div_action.querySelector("#delete").addEventListener("click", () => handleDelete(li));
