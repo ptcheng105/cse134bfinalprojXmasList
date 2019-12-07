@@ -14,7 +14,7 @@ export function handleLoginClicked() {
     }else{
         payload = `username=${user}&password=${secret}`;
     }
-    sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, payload );
+    sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, handleLoginTimeout, payload);
 }
 
 function responseToLoginRequest(xhr) {
@@ -24,7 +24,6 @@ function responseToLoginRequest(xhr) {
         localStorage.setItem("XmasWishlist_user", DOMPurify.sanitize(document.querySelector("#user").value));
         localStorage.setItem("XmasWishlist_key", resJson.id);
         window.location.href = "XmasWishlist.html";
-
     }else if(xhr.readyState == 4 && xhr.status == 401) {
         loginFailed();
     }
@@ -32,6 +31,12 @@ function responseToLoginRequest(xhr) {
 
 function loginFailed(){
     document.querySelector("#error_box").innerHTML = "Login Failed! Double check your login credentials";
+    document.querySelector("#user").value = "";
+    document.querySelector("#secret").value = "";
+}
+
+function handleLoginTimeout(){
+    document.querySelector("#error_box").innerHTML = "Login Failed! Connecting to Server is Timed out, check your network";
     document.querySelector("#user").value = "";
     document.querySelector("#secret").value = "";
 }
