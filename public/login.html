@@ -5,15 +5,21 @@
     <meta charset="utf-8">
     <title>Tim and Ben 's Christmas List Login Page</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.0.3/purify.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="./css/loginstyle.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Login in To your list!</h1>
+    <h1 id="title1">Have a</h1>
+    <h1 id="title2">Merry</h1>
+    <h1 id="title3">Merry</h1>
+    <h1 id="title4">Christmas!</h1>
     <div id="error_box"></div>
-    <p><label>Username or Email:</label><input type="text" id="user"></p>
-    <p><label>password:</label><input type="password" id="secret"></p>
-    <p><button id="login">Login</button></p>
-    <p><button id="signup">Sign Up</button></p>
+    <input type="text" id="user" placeholder="Email or Username">
+    <input type="password" id="secret" placeholder="Password">
+    <br>
+    <button id="login">Login</button>
+    <button id="signup">Sign Up</button>
 
     <script type="module">
             import { handleLoginClicked } from "./jsmodules/login.mjs";
