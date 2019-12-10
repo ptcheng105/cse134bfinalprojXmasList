@@ -6,7 +6,7 @@ export function handleSignupClicked() {
     dialog.id = "signdialog";
     let username = createElementToParent(dialog, "p", '<label>Username:</label><input type="text" id="signuser">' );
     let email = createElementToParent(dialog, "p", '<label>Email:</label><input type="text" id="signemail">')
-    let password = createElementToParent(dialog, "p", '<label>Password:</label><input type="text" id="signpass">');
+    let password = createElementToParent(dialog, "p", '<label>Password:</label><input type="password" id="signpass">');
     let submitbutton = createElementToParent(dialog, "button", "Sign Up!");
     submitbutton.addEventListener("click", handleSignUpButton);
     let cancelbutton = createElementToParent(dialog, "button", "Cancel");
@@ -30,8 +30,9 @@ export function handleSignUpButton() {
     let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
     let payload;
     if(isEmail(email) && user && secret) {
+        console.log(secret);
         payload = `username=${user}&email=${email}&password=${secret}`;
-        sendRequest("POST", base_url + "/Users", responseToSignupRequest, payload );
+        sendRequest("POST", base_url + "/Users", responseToSignupRequest, () => (alert("Sign Up Timed Out")), payload );
     }else{
         let err = document.body.querySelector("#errmsg");
         err.innerText = "Please enter a valid username, email and password"; 
@@ -45,7 +46,7 @@ function responseToSignupRequest(xhr) {
         let user = DOMPurify.sanitize(document.querySelector("#signuser").value);
         let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
         let payload = `username=${user}&password=${secret}`;
-        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, () => (alert("Sign Up Timed Out")), payload );
+        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, () => (alert("Login Timed Out")), payload );
         let dialog = document.getElementById("signdialog");
         dialog.close();
         dialog.parentNode.removeChild(dialog);

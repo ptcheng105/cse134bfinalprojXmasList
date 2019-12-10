@@ -10,16 +10,24 @@
 </head>
 
 <body>
-    <h1 id="title1">Have a</h1>
-    <h1 id="title2">Merry</h1>
-    <h1 id="title3">Merry</h1>
-    <h1 id="title4">Christmas!</h1>
+    <div id="intro">
+        <div id="merry">
+            <p id="title1">Have a</p>
+            <p id="title2">Merry</p>
+            <p id="title3">Merry</p>
+            <p id="title4">Christmas!</p>
+        </div>
+    </div>
     <div id="error_box"></div>
-    <input type="text" id="user" placeholder="Email or Username">
-    <input type="password" id="secret" placeholder="Password">
-    <br>
-    <button id="login">Login</button>
-    <button id="signup">Sign Up</button>
+    <div id="login">
+        <div id="inputs">
+            <input type="text" id="user" placeholder="Email or Username">
+            <input type="password" id="secret" placeholder="Password">
+            <br>
+            <button id="login">Login</button>
+            <button id="signup">Sign Up</button>
+        </div>
+    </div>
 
     <script type="module">
             import { handleLoginClicked } from "./jsmodules/login.mjs";
