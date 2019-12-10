@@ -46,7 +46,7 @@ function responseToSignupRequest(xhr) {
         let user = DOMPurify.sanitize(document.querySelector("#signuser").value);
         let secret = DOMPurify.sanitize(document.querySelector("#signpass").value);
         let payload = `username=${user}&password=${secret}`;
-        sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, () => (alert("Login Timed Out")), payload );
+        sendRequest("POST", base_url + "/Users/login", (xhr) => {responseToLoginRequest(xhr, user)}, () => (alert("Login Timed Out")), payload );
         let dialog = document.getElementById("signdialog");
         dialog.close();
         dialog.parentNode.removeChild(dialog);

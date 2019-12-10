@@ -14,13 +14,17 @@ export function handleLoginClicked() {
     }else{
         payload = `username=${user}&password=${secret}`;
     }
-    sendRequest("POST", base_url + "/Users/login", responseToLoginRequest, handleLoginTimeout, payload);
+    sendRequest("POST", base_url + "/Users/login", (xhr) => { responseToLoginRequest(xhr, null); }, handleLoginTimeout, payload);
 }
 
-export function responseToLoginRequest(xhr) {
+export function responseToLoginRequest(xhr , signUpUser) {
     if (xhr.readyState == 4 && xhr.status == 200) {
         var resJson = JSON.parse(xhr.responseText);
-        localStorage.setItem("XmasWishlist_user", DOMPurify.sanitize(document.querySelector("#user").value));
+        if( signUpUser ){
+            localStorage.setItem("XmasWishlist_user", signUpUser);
+        }else{
+            localStorage.setItem("XmasWishlist_user", DOMPurify.sanitize(document.querySelector("#user").value));
+        }
         localStorage.setItem("XmasWishlist_key", resJson.id);
         window.location.href = "XmasWishlist.html";
     }else if(xhr.readyState == 4 && xhr.status == 401) {
